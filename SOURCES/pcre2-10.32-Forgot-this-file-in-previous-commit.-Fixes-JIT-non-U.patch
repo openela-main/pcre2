@@ -1,0 +1,35 @@
+From 79fb8db65fa27070aac6dde8d6d468306ab6b9a9 Mon Sep 17 00:00:00 2001
+From: ph10 <ph10@6239d852-aaf2-0410-a92c-79f79f948069>
+Date: Mon, 13 May 2019 16:38:18 +0000
+Subject: [PATCH] Forgot this file in previous commit. Fixes JIT non-UTF bug.
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+git-svn-id: svn://vcs.exim.org/pcre2/code/trunk@1092 6239d852-aaf2-0410-a92c-79f79f948069
+Petr Písař: Ported to 10.32.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ src/pcre2_jit_compile.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/src/pcre2_jit_compile.c b/src/pcre2_jit_compile.c
+index 3cd3891..100b63c 100644
+--- a/src/pcre2_jit_compile.c
++++ b/src/pcre2_jit_compile.c
+@@ -7288,7 +7288,10 @@ int lgb, rgb, ricount;
+ PCRE2_SPTR bptr;
+ uint32_t c;
+ 
+-GETCHARINC(c, cc);
++/* Patch by PH */
++/* GETCHARINC(c, cc); */
++
++c = *cc++;
+ lgb = UCD_GRAPHBREAK(c);
+ 
+ while (cc < end_subject)
+-- 
+2.20.1
+
