@@ -1,0 +1,45 @@
+From 01d8a82b6333fac75799f475e1d543c2ba6d6744 Mon Sep 17 00:00:00 2001
+From: ph10 <ph10@6239d852-aaf2-0410-a92c-79f79f948069>
+Date: Mon, 13 May 2019 16:26:17 +0000
+Subject: [PATCH] Fix crash when \X is used without UTF in JIT.
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+git-svn-id: svn://vcs.exim.org/pcre2/code/trunk@1091 6239d852-aaf2-0410-a92c-79f79f948069
+Petr Písař: Ported to 10.32.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ testdata/testinput4  | 3 +++
+ testdata/testoutput4 | 4 ++++
+ 2 files changed, 7 insertions(+)
+
+diff --git a/testdata/testinput4 b/testdata/testinput4
+index a27b6af..8592666 100644
+--- a/testdata/testinput4
++++ b/testdata/testinput4
+@@ -2318,4 +2318,7 @@
+ /[^\x{100}-\x{ffff}]*[\x80-\xff]/i,utf
+     \x{99}\x{99}\x{99}
+ 
++/\X*/
++    \xF3aaa\xE4\xEA\xEB\xFEa
++
+ # End of testinput4
+diff --git a/testdata/testoutput4 b/testdata/testoutput4
+index ba3df37..0291149 100644
+--- a/testdata/testoutput4
++++ b/testdata/testoutput4
+@@ -3742,4 +3742,8 @@ No match
+     \x{99}\x{99}\x{99}
+  0: \x{99}\x{99}\x{99}
+ 
++/\X*/
++    \xF3aaa\xE4\xEA\xEB\xFEa
++ 0: \xf3aaa\xe4\xea\xeb\xfea
++
+ # End of testinput4
+-- 
+2.20.1
+
