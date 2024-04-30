@@ -9,7 +9,7 @@
 #%%global rcversion RC1
 Name:       pcre2
 Version:    10.40
-Release:    %{?rcversion:0.}2%{?rcversion:.%rcversion}%{?dist}
+Release:    %{?rcversion:0.}5%{?rcversion:.%rcversion}%{?dist}
 %global     myversion %{version}%{?rcversion:-%rcversion}
 Summary:    Perl-compatible regular expression library
 # the library:                          BSD with exceptions
@@ -51,6 +51,13 @@ Source1:    https://ftp.pcre.org/pub/pcre/%{?rcversion:Testing/}%{name}-%{myvers
 Source2:    https://ftp.pcre.org/pub/pcre/Public-Key
 # Do no set RPATH if libdir is not /usr/lib
 Patch0:     pcre2-10.10-Fix-multilib.patch
+# Upstream patch: https://github.com/PCRE2Project/pcre2/commit/4851890ede31313655e19180f4959ed348fee580
+Patch1:     pcre2-10.40-Fix-JIT-regression-in-PHP.patch
+# Upstream commits:
+# https://github.com/PCRE2Project/pcre2/commit/794245ecc296724b52f5030831e58bedbffa2452
+# https://github.com/PCRE2Project/pcre2/commit/457c0e69a8f78d32bc7d4b6422cd01e396a4cf5d
+Patch2:     pcre2-10.42-Match-also-restore-originally-unset-entries-in-recur.patch
+Patch3:     pcre2-10.42-Add-more-examples-fixed-by-300.patch
 
 BuildRequires:  autoconf
 BuildRequires:  automake
@@ -258,6 +265,16 @@ make %{?_smp_mflags} check VERBOSE=yes
 %{_mandir}/man1/pcre2test.*
 
 %changelog
+* Fri Feb 16 2024 Lukas Javorsky <ljavorsk@redhat.com> - 10.40-5
+- Rebuilt for added pcre2-tools into CRB
+
+* Mon Nov 13 2023 Lukas Javorsky <ljavorsk@redhat.com> - 10.40-4
+- Fix an issue with restoring originally unset entries in recursion
+- Resolves: BZ#2248133
+
+* Tue Oct 17 2023 Lukas Javorsky <ljavorsk@redhat.com> - 10.40-3
+- Fix issue in the backtracking optimization of character in JIT
+
 * Wed May 18 2022 Lukas Javorsky <ljavorsk@redhat.com> - 10.40-2
 - Explicitly require uft subpackages in tools subpackage
 
