@@ -9,7 +9,7 @@
 #%%global rcversion RC1
 Name:       pcre2
 Version:    10.40
-Release:    %{?rcversion:0.}5%{?rcversion:.%rcversion}%{?dist}
+Release:    %{?rcversion:0.}6%{?rcversion:.%rcversion}%{?dist}
 %global     myversion %{version}%{?rcversion:-%rcversion}
 Summary:    Perl-compatible regular expression library
 # the library:                          BSD with exceptions
@@ -58,6 +58,8 @@ Patch1:     pcre2-10.40-Fix-JIT-regression-in-PHP.patch
 # https://github.com/PCRE2Project/pcre2/commit/457c0e69a8f78d32bc7d4b6422cd01e396a4cf5d
 Patch2:     pcre2-10.42-Match-also-restore-originally-unset-entries-in-recur.patch
 Patch3:     pcre2-10.42-Add-more-examples-fixed-by-300.patch
+# Upstream patch: https://github.com/PCRE2Project/pcre2/commit/f2411acb3711a44497539d17b245bd366d9c26d7
+Patch4:     pcre2-10.42-jit-fail-early-in-ffcps_-if-subject.patch
 
 BuildRequires:  autoconf
 BuildRequires:  automake
@@ -265,6 +267,10 @@ make %{?_smp_mflags} check VERBOSE=yes
 %{_mandir}/man1/pcre2test.*
 
 %changelog
+* Wed Jul 31 2024 Lukas Javorsky <ljavorsk@redhat.com> - 10.40-6
+- Fix SEGFAULT caused by dereferencing subject when length==0 on aarch64
+- Resolves: RHEL-51866
+
 * Fri Feb 16 2024 Lukas Javorsky <ljavorsk@redhat.com> - 10.40-5
 - Rebuilt for added pcre2-tools into CRB
 
