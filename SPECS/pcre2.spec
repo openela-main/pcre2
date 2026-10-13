@@ -9,7 +9,7 @@
 #%%global rcversion RC1
 Name:       pcre2
 Version:    10.40
-Release:    %{?rcversion:0.}6%{?rcversion:.%rcversion}%{?dist}
+Release:    %{?rcversion:0.}7%{?rcversion:.%rcversion}%{?dist}
 %global     myversion %{version}%{?rcversion:-%rcversion}
 Summary:    Perl-compatible regular expression library
 # the library:                          BSD with exceptions
@@ -60,6 +60,22 @@ Patch2:     pcre2-10.42-Match-also-restore-originally-unset-entries-in-recur.pat
 Patch3:     pcre2-10.42-Add-more-examples-fixed-by-300.patch
 # Upstream patch: https://github.com/PCRE2Project/pcre2/commit/f2411acb3711a44497539d17b245bd366d9c26d7
 Patch4:     pcre2-10.42-jit-fail-early-in-ffcps_-if-subject.patch
+# https://github.com/PCRE2Project/pcre2/commit/c932e70451eafef922ebef364ac25042f0031135
+Patch5:     pcre2-10.40-CVE-2026-86145.patch
+# https://github.com/PCRE2Project/pcre2/commit/fb4667966dc92c107032d926d412c3d3633a129c
+Patch6:     pcre2-10.40-CVE-2026-89161.patch
+# https://github.com/PCRE2Project/pcre2/commit/f67db227af31bba7cdf2a7a00b97af91b588c2f5.patch
+Patch7:     pcre2-10.40-CVE-2026-89156.patch
+# https://github.com/PCRE2Project/pcre2/commit/8156b3989a82f2ddf9504d8248496e9b124be7f3.patch
+Patch8:     pcre2-10.40-CVE-2026-89157.patch
+# https://github.com/PCRE2Project/pcre2/commit/ec9c286d5c10cf1c388b58a442ccefded42254fd.patch
+Patch9:     pcre2-10.40-CVE-2026-89158.patch
+# https://github.com/PCRE2Project/pcre2/commit/4889caf31a4c5a6b3c051f0031bf2dbd78f2c287.patch
+Patch10:    pcre2-10.40-CVE-2026-89160.patch
+# https://github.com/PCRE2Project/pcre2/commit/2b4038298072684b0fae29b15bedfb1a75bda46d.patch
+# exclude the test case which is platform specific and failing on i686
+# https://github.com/PCRE2Project/pcre2/commit/6f9d7c1373262c541324a16a358785b33ef116cf
+Patch11:    pcre2-10.40-CVE-2026-103111.patch
 
 BuildRequires:  autoconf
 BuildRequires:  automake
@@ -267,6 +283,11 @@ make %{?_smp_mflags} check VERBOSE=yes
 %{_mandir}/man1/pcre2test.*
 
 %changelog
+* Mon Sep 21 2026 Daniel Handzus <dhandzus@redhat.com> - 10.40-7
+- Backport multiple CVE fixes
+- CVE-2026-86145, CVE-2026-89156, CVE-2026-89157, CVE-2026-89158,
+  CVE-2026-89160, CVE-2026-89161
+
 * Wed Jul 31 2024 Lukas Javorsky <ljavorsk@redhat.com> - 10.40-6
 - Fix SEGFAULT caused by dereferencing subject when length==0 on aarch64
 - Resolves: RHEL-51866
