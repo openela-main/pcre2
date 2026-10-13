@@ -9,7 +9,7 @@
 #%%global rcversion RC1
 Name:       pcre2
 Version:    10.32
-Release:    %{?rcversion:0.}3%{?rcversion:.%rcversion}%{?dist}
+Release:    %{?rcversion:0.}4%{?rcversion:.%rcversion}%{?dist}
 %global     myversion %{version}%{?rcversion:-%rcversion}
 Summary:    Perl-compatible regular expression library
 # the library:                          BSD with exceptions
@@ -73,6 +73,17 @@ Patch6:     pcre2-10.32-Forgot-this-file-in-previous-commit.-Fixes-JIT-non-U.pat
 # Ref: https://github.com/PCRE2Project/pcre2/commit/50a51cb7e67268e6ad417eb07c9de9bfea5cc55a
 # https://github.com/PCRE2Project/pcre2/commit/d4fa336fbcc388f89095b184ba6d99422cfc676c
 Patch7: pcre2-10.32-Fix-CVE-2022-1586
+# https://github.com/PCRE2Project/pcre2/commit/c932e70451eafef922ebef364ac25042f0031135
+Patch8: pcre2-10.32-Fix-CVE-2026-86145.patch
+# https://github.com/PCRE2Project/pcre2/commit/8156b3989a82f2ddf9504d8248496e9b124be7f3
+Patch9: pcre2-10.32-Fix-CVE-2026-89157.patch
+# https://github.com/PCRE2Project/pcre2/commit/ec9c286d5c10cf1c388b58a442ccefded42254fd
+Patch10: pcre2-10.32-Fix-CVE-2026-89158.patch
+# https://github.com/PCRE2Project/pcre2/commit/2b4038298072684b0fae29b15bedfb1a75bda46d.patch
+# exclude the test case which is platform specific and failing on i686
+# https://github.com/PCRE2Project/pcre2/commit/6f9d7c1373262c541324a16a358785b33ef116cf
+Patch11: pcre2-10.32-Fix-CVE-2026-103111.patch
+
 BuildRequires:  autoconf
 BuildRequires:  automake
 BuildRequires:  coreutils
@@ -142,6 +153,8 @@ Summary:    Auxiliary utilities for %{name}
 # pcre2test (linked to GNU readline):   BSD (linked to GPLv3+)
 License:    BSD and GPLv3+
 Requires:   %{name}%{_isa} = %{version}-%{release}
+Requires:   %{name}-utf16%{?_isa} = %{version}-%{release}
+Requires:   %{name}-utf32%{?_isa} = %{version}-%{release}
 
 %description tools
 Utilities demonstrating PCRE2 capabilities like pcre2grep or pcre2test.
@@ -156,6 +169,10 @@ Utilities demonstrating PCRE2 capabilities like pcre2grep or pcre2test.
 %patch5 -p1
 %patch6 -p1
 %patch7 -p1
+%patch8 -p1
+%patch9 -p1
+%patch10 -p1
+%patch11 -p1
 # Because of multilib patch
 libtoolize --copy --force
 autoreconf -vif
@@ -257,6 +274,11 @@ make %{?_smp_mflags} check VERBOSE=yes
 %{_mandir}/man1/pcre2test.*
 
 %changelog
+* Wed Sep 23 2026 Daniel Handzus <dhandzus@redhat.com> - 10.32-4
+- Backport multiple CVEs fixes
+- CVE-2026-89157, CVE-2026-89158, CVE-2026-86145, CVE-2026-103111
+- Add explicit Requires on pcre2-utf16/utf32 for pcre2-tools subpackage
+
 * Fri May 13 2022 Lukas Javorsky <ljavorsk@redhat.com> - 10.32-3
 - Resolves: CVE-2022-1586
 
