@@ -9,7 +9,7 @@
 #%%global rcversion RC1
 Name:       pcre2
 Version:    10.44
-Release:    %{?rcversion:0.}1%{?rcversion:.%rcversion}%{?dist}.3
+Release:    %{?rcversion:0.}1.5%{?rcversion:.%rcversion}%{?dist}
 %global     myversion %{version}%{?rcversion:-%rcversion}
 Summary:    Perl-compatible regular expression library
 # the library:                          BSD with exceptions
@@ -54,6 +54,20 @@ Patch0:     pcre2-10.10-Fix-multilib.patch
 # Upstream commit: https://github.com/PCRE2Project/pcre2/commit/57906628d7babd27c01eb1c085d3e0cdd512189a
 # Fixes the failing tests on 32-bit arch (i686)
 Patch1:     pcre2-10.44-pcre2test-memory-reports-only-compiled-memory-usage.patch
+# https://github.com/PCRE2Project/pcre2/commit/c932e70451eafef922ebef364ac25042f0031135
+Patch2:     pcre2-10.44-CVE-2026-86145.patch
+# https://github.com/PCRE2Project/pcre2/pull/937/changes/82443294822e9d7a650b2f38dfc6144270a78420
+Patch3:     pcre2-10.44-CVE-2026-89161.patch
+# https://github.com/PCRE2Project/pcre2/commit/8156b3989a82f2ddf9504d8248496e9b124be7f3
+Patch4:     pcre2-10.44-CVE-2026-89157.patch
+# https://github.com/PCRE2Project/pcre2/commit/ec9c286d5c10cf1c388b58a442ccefded42254fd
+Patch5:     pcre2-10.44-CVE-2026-89158.patch
+# https://github.com/PCRE2Project/pcre2/commit/e2575c9cd50a74156ac740b0851b8187c6361266.patch 
+Patch6:     pcre2-10.44-CVE-2026-89160.patch
+# https://github.com/PCRE2Project/pcre2/commit/f67db227af31bba7cdf2a7a00b97af91b588c2f5
+Patch7:     pcre2-10.44-CVE-2026-89156.patch
+# https://github.com/PCRE2Project/pcre2/commit/2b4038298072684b0fae29b15bedfb1a75bda46d
+Patch8:     pcre2-10.44-CVE-2026-103111.patch
 
 BuildRequires:  autoconf
 BuildRequires:  automake
@@ -260,6 +274,13 @@ make %{?_smp_mflags} check VERBOSE=yes
 %{_mandir}/man1/pcre2test.*
 
 %changelog
+* Fri Oct 2 2026 Daniel Handzus <dhandzus@redhat.com> - 10.44-1.5
+- Fix and bump release, resolve the issue of build not attaching to errata
+
+* Mon Sep 21 2026 Daniel Handzus <dhandzus@redhat.com> - 10.44-1.4
+- Backport CVE fixes for CVE-2026-86145, CVE-2026-89156, CVE-2026-89157,
+  CVE-2026-89158, CVE-2026-89160, CVE-2026-89161, CVE-2026-103111
+
 * Tue Oct 29 2024 Troy Dawson <tdawson@redhat.com> - 10.44-1.3
 - Bump release for October 2024 mass rebuild:
   Resolves: RHEL-64018
